@@ -1,0 +1,98 @@
+PT1 
+1) 5 propriedades de uma árvore Rubro-Negra 
+Todo nó é vermelho ou preto 
+ A raiz é sempre preta 
+ Todas as folhas (nil) são pretas 
+ Se um nó é vermelho, ambos os filhos são pretos 
+ Para cada nó, todos os caminhos para as folhas descendentes contêm o mesmo 
+número de nós pretos 
+ 
+2) Por que novo vértice é sempre vermelho? 
+Para minimizar violações - inserir como preto violaria imediatamente a propriedade da 
+altura negra, exigindo correções mais complexas. 
+ 
+3) 
+Inserção 10:    10(B) 
+  
+Inserção 20:    10(B) 
+                  \ 
+                  20(R) 
+  
+Inserção 5:     10(B) 
+                /    \ 
+              5(R)  20(R) 
+4) 
+Pai e avô vermelhos 
+Pai vermelho: NÃO (viola propriedade 4) 
+Avô vermelho: SIM (desde que o pai seja preto) 
+PT2 
+1) Função Potencial  
+número de nós vermelhos com pai vermelho 
+Boa medida: Captura violações diretas da propriedade RN 
+2) Lição sobre complexidade 
+Árvores balanceadas garantem que o pior caso seja tão bom quanto o caso médio, 
+eliminando degradação de performance. 
+3) Sucesso vs Falha no processo geométrico 
+Sucesso: Tio preto (termina processo) 
+Falha: Tio vermelho (continua processo) 
+4) Comprimento de Caminho Interno (IPL) 
+Soma das profundidades de todos os nós. Relaciona-se com busca: número médio de 
+comparações = (IPL + n)/n 
+PT3 
+1) Inserção: 30, 20, 40, 10, 25, 35, 50 
+30(B) → 30(B) → 30(B) → 30(B) → 30(B) → 30(B) → 30(B) 
+/       
+/    \   /    \   /    \   /    \   /    \ 
+20(R)   20(B) 40(B) 20(B) 40(B) 20(B) 40(B) 
+/     /    /  \   /  \   /  \   /  \ 
+10(R) 10(R)25(R) 35(R) 50(R) 
+2) Maior elemento 
+Percorre sempre à direita até encontrar nil. Complexidade: O(log n) - mesma que BST 
+comum, mas garantida. 
+3) Conceito de "duplo-preto", nó que conta como 2 pretos na altura negra. Ocorre 
+apenas na remoção de nó preto para preservar propriedade da altura negra. 
+4) Irmão vermelho - por que rotação? 
+Para transformar o problema em um caso resolvível (irmão preto), realinhando a 
+estrutura. 
+PT4  
+1) Fixup com 3 iterações 
+a) Custo Real: 3 unidades (cada iteração custa 1) 
+b) ΔΦ: -3 (cada recoloração reduz potencial em 1) 
+c) Custo Amortizado: a = c + ΔΦ = 3 + (-3) = 0 
+2) Diferença entre análises 
+Amortizada: Garante custo constante para sequência de operações 
+Caso Médio: Garante custo constante para operação individual em árvore aleatória 
+3) Árvore [10, 5, 15, 3, 7, 12, 17] e IPL 
+10(B) 
+/     \ 
+5(R)    15(R) 
+/   \    /   \ 
+3(B) 7(B)12(B)17(B) 
+IPL: (0) + (1+1) + (2+2+2+2) + (3+3+3+3) = 0 + 2 + 8 + 12 = 22 
+E[X]: (22 + 7)/7 = 29/7 ≈ 4.14 comparações 
+PT5 
+1) Busca mal-sucedida e IPL 
+Considerar nil como folhas externas no IPL. Custo médio busca mal-sucedida = 
+(IPL_externo)/n, que também é O(log n). 
+2) Cenário O(log n) busca + O(log n) fixup, arvore totalmente balanceada com inserção 
+na raiz que requer fixup até a raiz. Exemplo: árvore com altura h onde novo nó causa 
+violação que propaga até raiz. 
+3) Probabilidade do tio ser preto 
+Em árvore grande e aleatória, maioria dos tios será preta devido à propriedade RN que 
+limita nós vermelhos consecutivos. 
+PT 6 
+1) Prova altura máxima h ≤ 2log₂(n+1) 
+Pela propriedade RN: árvore com altura h tem pelo menos 2^(h/2) - 1 nós internos. 
+Logo: n ≥ 2^(h/2) - 1 ⇒ h ≤ 2log₂(n+1) 
+2) Função countRedNodes 
+int countRedNodes(Node* root) { 
+if (root == nullptr || root == nil) return 0; 
+int count = (root->color == RED) ? 1 : 0; 
+return count + countRedNodes(root->left) + countRedNodes(root->right); 
+} 
+3) Cenário máximo rotações remoção 
+Remoção de nó preto com duplo-preto que propaga até raiz, alternando entre casos 
+que requerem rotações. 
+4) Remoção pode diminuir altura preta? 
+NÃO - a altura preta é preservada em todas as operações através do mecanismo de 
+duplo-preto e rotações/recolorações.

@@ -1,0 +1,178 @@
+PT1 
+1) Por que novo vértice é sempre inserido com a cor vermelha? 
+Um novo vértice é sempre inserido como vermelho para minimizar violações das 
+propriedades Rubro-Negras. Se inserido como preto, violaria imediatamente a 
+propriedade da altura negra (propriedade 5), exigindo correções mais complexas e 
+custosas. A cor vermelha pode violar apenas a propriedade 4 (dois vermelhos 
+consecutivos), que é mais fácil de corrigir. 
+Passo 1: Inserir 10 (raiz sempre preta) 
+10(B) 
+Passo 2: Inserir 20 (inserir como vermelho) 
+10(B) 
+\ 
+20(R) 
+Passo 3: Inserir 5 (inserir como vermelho) 
+10(B) 
+/    \ 
+5(R)  20(R) 
+Pai vermelho e avô vermelho 
+Pai vermelho: NÃO É POSSÍVEL - viola a propriedade 4 (um nó vermelho não pode ter 
+filho vermelho) 
+Avô vermelho: É POSSÍVEL - desde que o pai seja preto. Exemplo: 
+30(R) 
+/    \ 
+10(B)  40(B) 
+/  \ 
+5(R) 15(R) 
+PT2 
+1) Inserção: 30, 20, 40, 10, 25 com rotações e recolorações 
+Passo 1: Inserir 30 (raiz preta) 
+30(B) 
+Passo 2: Inserir 20 (filho esquerdo vermelho) 
+30(B) 
+/ 
+20(R) 
+Passo 3: Inserir 40 (filho direito vermelho) 
+30(B) 
+/    \ 
+20(R)  40(R) 
+Passo 4: Inserir 10 (filho esquerdo de 20 - vermelho) 
+VIOLAÇÃO: 20(R) tem filho 10(R) - dois vermelhos consecutivos 
+CASO 1: Tio (40) é vermelho → Recolorir 
+30(R) 
+/    \ 
+20(B)  40(B) 
+/ 
+10(R) 
+Corrigir raiz: Raiz sempre preta 
+30(B) 
+/    \ 
+20(B)  40(B) 
+/ 
+10(R) 
+Passo 5: Inserir 25 (filho direito de 20 - vermelho) 
+VIOLAÇÃO: 20(B) tem filho 25(R) - OK (não viola) 
+CASO 2: 25 é filho direito, 20 é filho esquerdo → Rotação esquerda 
+30(B) 
+/    \ 
+25(B)  40(B) 
+/ 
+20(R) 
+CASO 3: Rotação direita no avô 
+25(B) 
+/    \ 
+20(R)  30(B) 
+\ 
+40(B) 
+Conceito de "duplo-preto" 
+Duplo-preto é um conceito usado durante a remoção para representar um nó que 
+conta como dois nós pretos para a altura negra. Isso ocorre apenas na remoção de um 
+vértice preto porque: 
+  
+Remoção de vermelho: Não afeta a altura negra 
+  
+Remoção de preto: Reduz a altura negra no caminho, violando a propriedade 5 
+  
+Solução: Marcar temporariamente como "duplo-preto" para preservar altura negra 
+durante correções 
+  
+Caso 1 da remoção (irmão vermelho) 
+O Caso 1 não resolve diretamente porque: 
+Irmão vermelho significa que os sobrinhos são pretos (propriedade RN) 
+Rotacionar e recoloriir transforma o problema em um dos outros casos (2, 3 ou 4) onde: 
+O irmão se torna preto 
+A estrutura permite redistribuição adequada do "duplo-preto" 
+Estratégia: Reduz para caso resolvível em uma iteração 
+ 
+PT 3 
+1) Função remover completa (caso espelhado) 
+void fixDelete(Node* x) { 
+    while (x != root && x->color == BLACK) { 
+        if (x == x->parent->left) { 
+            // Código original (filho esquerdo) 
+            Node* w = x->parent->right; 
+            if (w->color == RED) { 
+                // Caso 1: irmão vermelho 
+                w->color = BLACK; 
+                x->parent->color = RED; 
+                leftRotate(x->parent); 
+                w = x->parent->right; 
+            } 
+            if (w->left->color == BLACK && w->right->color == BLACK) { 
+                // Caso 2: ambos sobrinhos pretos 
+                w->color = RED; 
+                x = x->parent; 
+            } else { 
+                if (w->right->color == BLACK) { 
+                    // Caso 3: sobrinho direito preto 
+                    w->left->color = BLACK; 
+                    w->color = RED; 
+                    rightRotate(w); 
+                    w = x->parent->right; 
+                } 
+                // Caso 4: sobrinho direito vermelho 
+                w->color = x->parent->color; 
+                x->parent->color = BLACK; 
+                w->right->color = BLACK; 
+                leftRotate(x->parent); 
+                x = root; 
+            } 
+        } else { 
+            // CÓDIGO ESPELHADO (filho direito) 
+            Node* w = x->parent->left; 
+            if (w->color == RED) { 
+                // Caso 1 espelhado: irmão vermelho 
+                w->color = BLACK; 
+                x->parent->color = RED; 
+                rightRotate(x->parent); 
+                w = x->parent->left; 
+            } 
+            if (w->right->color == BLACK && w->left->color == BLACK) { 
+                // Caso 2 espelhado: ambos sobrinhos pretos 
+                w->color = RED; 
+                x = x->parent; 
+            } else { 
+                if (w->left->color == BLACK) { 
+                    // Caso 3 espelhado: sobrinho esquerdo preto 
+                    w->right->color = BLACK; 
+                    w->color = RED; 
+                    leftRotate(w); 
+                    w = x->parent->left; 
+                } 
+                // Caso 4 espelhado: sobrinho esquerdo vermelho 
+                w->color = x->parent->color; 
+                x->parent->color = BLACK; 
+                w->left->color = BLACK; 
+                rightRotate(x->parent); 
+                x = root; 
+            } 
+        } 
+    } 
+    x->color = BLACK; 
+} 
+ 
+Prova: altura h ≤ 2log₂(n+1) 
+Lema: Uma subárvore com raiz em x contém pelo menos 2^(bh(x)) - 1 nós internos, 
+onde bh(x) é a altura negra. 
+Prova por indução: 
+Base: bh(x) = 0 → x é nil → 0 nós = 2⁰ - 1 = 0 ✓ 
+Indução: Para bh(x) > 0, cada filho tem bh ≥ bh(x)-1. Pela hipótese: 
+Nós na subárvore ≥ 1 + [2^(bh(x)-1) - 1] + [2^(bh(x)-1) - 1] = 2^(bh(x)) - 1 ✓ 
+Propriedade RN: Pela propriedade 4, pelo menos metade dos nós no caminho da raiz à 
+folha são pretos: h/2 ≤ bh(raiz) 
+Logo: n ≥ 2^(bh(raiz)) - 1 ≥ 2^(h/2) - 1 
+⇒ 2^(h/2) ≤ n + 1 
+⇒ h/2 ≤ log₂(n + 1) 
+⇒ h ≤ 2log₂(n + 1) □ 
+A remoção pode diminuir a altura preta? 
+NÃO, a  emoção de um vértice em uma árvore Rubro-Negra nunca diminui a altura 
+preta global da árvore. 
+Por quê? 
+Mecanismo de preservação: O algoritmo usa "duplo-preto" e rotações/recolorações 
+especificamente para manter a altura negra inalterada 
+Propriedade fundamental: A altura negra é preservada em todas as operações de 
+inserção e remoção 
+Correções: Mesmo quando um nó preto é removido, as correções redistribuem a 
+"negritude" sem reduzir a altura negra geral 
+A única maneira de alterar a altura negra seria através de uma operação que violasse 
+as propriedades fundamentais da estrutura. 

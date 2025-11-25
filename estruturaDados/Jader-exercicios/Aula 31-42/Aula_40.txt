@@ -1,0 +1,189 @@
+Exercício 1: Simulação BFS e DFS 
+Considerando este grafo: 
+0 -- 1 -- 3 
+|    
+|    
+| 
+2 -- 4 – 5 
+Vértice inicial: 0 
+BFS (Busca em Largura) 
+Ordem de visitação: 0 → 1 → 2 → 3 → 4 → 5 
+Estado da fila: 
+Passo 0: Fila = [0], Visitados = {0} 
+Passo 1: Processa 0 → Fila = [1, 2], Visitados = {0,1,2} 
+Passo 2: Processa 1 → Fila = [2, 3, 4], Visitados = {0,1,2,3,4} 
+Passo 3: Processa 2 → Fila = [3, 4], Visitados = {0,1,2,3,4} 
+Passo 4: Processa 3 → Fila = [4, 5], Visitados = {0,1,2,3,4,5} 
+Passo 5: Processa 4 → Fila = [5], Visitados = {0,1,2,3,4,5} 
+Passo 6: Processa 5 → Fila = [], Visitados = {0,1,2,3,4,5} 
+ 
+DFS (Busca em Profundidade - Recursivo) 
+Ordem de visitação: 0 → 1 → 3 → 5 → 4 → 2 
+  
+Pilha de recursão: 
+DFS(0): Visita 0 
+  DFS(1): Visita 1 
+    DFS(3): Visita 3 
+      DFS(5): Visita 5 
+        DFS(4): Visita 4 
+          DFS(2): Visita 2 (já visitado? Não) 
+          Retorna de DFS(2) 
+        Retorna de DFS(4) 
+      Retorna de DFS(5) 
+    Retorna de DFS(3) 
+  Retorna de DFS(1) 
+Retorna de DFS(0) 
+ 
+Exercício 2: BFS + Caminho Mínimo 
+#include #include #include  
+using namespace std; 
+vector bfs_caminho_minimo(vector<vector>& grafo, int s) { int n = grafo.size(); vector 
+distancia(n, INT_MAX); // Inicializa com infinito vector visitado(n, false); queue fila; 
+// Inicializa vértice origem 
+distancia[s] = 0; 
+visitado[s] = true; 
+fila.push(s); 
+ 
+while (!fila.empty()) { 
+    int u = fila.front(); 
+    fila.pop(); 
+     
+    // Visita todos os vizinhos de u 
+    for (int v : grafo[u]) { 
+        if (!visitado[v]) { 
+            visitado[v] = true; 
+            distancia[v] = distancia[u] + 1;  // Distância mínima 
+            fila.push(v); 
+        } 
+    } 
+} 
+ 
+return distancia; 
+  
+} 
+// Exemplo de uso: int main() { // Grafo não-direcionado: 0-1-2 vector<vector> grafo = { 
+{1}, // 0 {0, 2}, // 1 
+ {1} // 2 }; 
+vector<int> dist = bfs_caminho_minimo(grafo, 0); 
+// dist[0] = 0, dist[1] = 1, dist[2] = 2 
+  
+} 
+ 
+Exercício 3: DFS + Detecção de Ciclo em Grafo Direcionado 
+#include #include  
+using namespace std; 
+enum Cor { BRANCO, CINZA, PRETO }; 
+bool dfs_ciclo(vector<vector>& grafo, int u, vector& cor) { // Marca como em 
+processamento (na pilha de recursão) cor[u] = CINZA; 
+// Visita todos os vizinhos 
+for (int v : grafo[u]) { 
+    if (cor[v] == BRANCO) { 
+        // Vizinho não visitado - faz DFS recursivo 
+        if (dfs_ciclo(grafo, v, cor)) { 
+            return true;  // Ciclo encontrado na recursão 
+        } 
+    } else if (cor[v] == CINZA) { 
+        // Encontrou vértice que está na pilha de recursão → CICLO! 
+        return true; 
+    } 
+    // Se cor[v] == PRETO, ignora (já totalmente processado) 
+} 
+ 
+// Marca como totalmente processado 
+cor[u] = PRETO; 
+return false; 
+  
+} 
+bool tem_ciclo_direcionado(vector<vector>& grafo) { int n = grafo.size(); vector cor(n, 
+BRANCO); // Todos não visitados inicialmente 
+// Faz DFS a partir de cada vértice não visitado 
+for (int i = 0; i < n; i++) { 
+    if (cor[i] == BRANCO) { 
+        if (dfs_ciclo(grafo, i, cor)) { 
+            return true; 
+        } 
+    } 
+} 
+ 
+return false; 
+  
+} 
+// Exemplo de uso: int main() { // Grafo direcionado COM ciclo: 0→1→2→0 vector<vector> 
+grafo_com_ciclo = { {1}, // 0 → 1 {2}, // 1 → 2 
+ {0} // 2 → 0 (ciclo!) }; 
+// Grafo direcionado SEM ciclo: 0→1→2 
+vector<vector<int>> grafo_sem_ciclo = { 
+    {1},    // 0 → 1 
+    {2},    // 1 → 2   
+    {}      // 2 →  
+}; 
+ 
+cout << "Grafo com ciclo: " << 
+tem_ciclo_direcionado(grafo_com_ciclo) << endl;  // 1 (true) 
+cout << "Grafo sem ciclo: " << 
+tem_ciclo_direcionado(grafo_sem_ciclo) << endl;  // 0 (false) 
+  
+} 
+#include #include  
+using namespace std; 
+enum Cor { BRANCO, CINZA, PRETO }; 
+bool dfs_ciclo(vector<vector>& grafo, int u, vector& cor) { // Marca como em 
+processamento (na pilha de recursão) cor[u] = CINZA; 
+// Visita todos os vizinhos 
+for (int v : grafo[u]) { 
+    if (cor[v] == BRANCO) { 
+        // Vizinho não visitado - faz DFS recursivo 
+        if (dfs_ciclo(grafo, v, cor)) { 
+            return true;  // Ciclo encontrado na recursão 
+        } 
+    } else if (cor[v] == CINZA) { 
+        // Encontrou vértice que está na pilha de recursão → CICLO! 
+        return true; 
+    } 
+    // Se cor[v] == PRETO, ignora (já totalmente processado) 
+} 
+ 
+// Marca como totalmente processado 
+cor[u] = PRETO; 
+return false; 
+  
+} 
+bool tem_ciclo_direcionado(vector<vector>& grafo) { int n = grafo.size(); vector cor(n, 
+BRANCO); // Todos não visitados inicialmente 
+// Faz DFS a partir de cada vértice não visitado 
+for (int i = 0; i < n; i++) { 
+    if (cor[i] == BRANCO) { 
+        if (dfs_ciclo(grafo, i, cor)) { 
+            return true; 
+        } 
+    } 
+} 
+ 
+return false; 
+  
+} 
+// Exemplo de uso: int main() { // Grafo direcionado COM ciclo: 0→1→2→0 vector<vector> 
+grafo_com_ciclo = { {1}, // 0 → 1 {2}, // 1 → 2 
+ {0} // 2 → 0 (ciclo!) }; 
+// Grafo direcionado SEM ciclo: 0→1→2 
+vector<vector<int>> grafo_sem_ciclo = { 
+    {1},    // 0 → 1 
+    {2},    // 1 → 2   
+    {}      // 2 →  
+}; 
+ 
+cout << "Grafo com ciclo: " << 
+tem_ciclo_direcionado(grafo_com_ciclo) << endl;  // 1 (true) 
+cout << "Grafo sem ciclo: " << 
+tem_ciclo_direcionado(grafo_sem_ciclo) << endl;  // 0 (false) 
+  
+} 
+BRANCO: Vértice não visitado 
+  
+CINZA: Vértice sendo processado (na pilha de recursão atual) 
+  
+PRETO: Vértice totalmente processado 
+  
+Ciclo detectado quando: Encontramos uma aresta para um vértice CINZA (back edge), 
+indicando que há um caminho de volta para um vértice que ainda está sendo 
+processado na pilha de recursão.

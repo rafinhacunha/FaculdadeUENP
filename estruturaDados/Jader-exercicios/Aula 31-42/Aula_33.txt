@@ -1,0 +1,95 @@
+Pt1 
+1)  
+Campo de cor: Substitui o fator de balanceamento por uma cor (vermelho/preto) 
+Finalidade: Controlar o balanceamento através das propriedades de cores em vez de 
+alturas 
+Ponteiro para o pai: Em muitas implementações RN, adiciona-se um ponteiro para o nó 
+pai 
+Finalidade: Facilitar navegação ascendente durante operações de correção (fixup) 
+2) 
+Árvore RN (void): Geralmente usa abordagem iterativa com ponteiro para pai, 
+atualizando referências in-place 
+AVL (Vertice*): Usa abordagem recursiva, necessita retornar nova raiz da subárvore 
+3) 
+Nenhuma rotação ou recoloração - a árvore já está balanceada pois: 
+Novo nó vermelho com pai preto não viola propriedades RN 
+Altura negra permanece inalterada 
+Não há dois nós vermelhos consecutivos 
+4) Cor preta - importante porque: 
+Preserva propriedade 3 (folhas são pretas) 
+Mantém consistência na altura negra 
+Evita violações com nós vermelhos terem filhos vermelhos 
+PT2 
+1) 
+Inserção 12: 
+Raiz → preta     12(B) 
+Inserção 9: 
+Inserir como filho esquerdo vermelho 
+12(B) 
+/ 
+9(R) 
+Inserção 20: 
+Inserir como filho direito vermelho 
+12(B) 
+/    \ 
+9(R)  20(R) 
+Inserção 15: 
+Inserir como filho esquerdo de 20 (vermelho) 
+Caso 1: Pai (20) e tio (9) vermelhos 
+Recoloração: Pai, tio → preto; avô → vermelho 
+12(R) 
+/    \ 
+9(B)  20(B) 
+/ 
+15(R) 
+Inserção 25: 
+Inserir como filho direito de 20 (vermelho) 
+Sem violações 
+12(B) 
+/    \ 
+9(B)  20(B) 
+/    \ 
+15(R)  25(R) 
+2) A recoloração preserva a altura negra porque: 
+Antes: avô preto contribuía +1 para altura negra 
+Depois: avô vermelho não conta, mas dois filhos pretos contribuem +1 cada 
+Resultado: Altura negra dos caminhos através do avô permanece igual 
+3) Propriedade violada: Propriedade 5 (altura negra) 
+Caminho através do novo nó terá altura negra maior 
+Mais custoso: Requer rebalanceamento em cascata afetando múltiplos níveis 
+PT3 
+1) 
+else { // pai é filho direito do avô 
+tio = avo->esquerda; 
+// Caso 1: tio vermelho 
+if (tio->cor == VERMELHO) { 
+pai->cor = PRETO; 
+        tio->cor = PRETO; 
+        avo->cor = VERMELHO; 
+        atual = avo; 
+    } 
+    else { 
+        // Caso 2: atual é filho esquerdo 
+        if (atual == pai->esquerda) { 
+            atual = pai; 
+            rotacaoDireita(atual); 
+            pai = atual->pai; 
+        } 
+        // Caso 3: atual é filho direito 
+        pai->cor = PRETO; 
+        avo->cor = VERMELHO; 
+        rotacaoEsquerda(avo); 
+    } 
+} 
+ 
+2) Inserções: [41, 38, 31, 12, 19, 8] 
+Caso 1: Ao inserir 31 (tio vermelho) 
+Caso 2: Ao inserir 19 (atual e pai em direções opostas) 
+Caso 3: Ao inserir 8 (atual e pai na mesma direção) 
+ 
+3) uma rotação é suficiente 
+Porque resolve a violação: 
+Caso 2: Alinha atual e pai na mesma direção → transforma em Caso 3 
+Caso 3: Rotação promove pai preto e rebaixa avô vermelho 
+Resultado: Elimina dois vermelhos consecutivos 
+ Altura negra: Permanece inalterada nos caminhos afetados

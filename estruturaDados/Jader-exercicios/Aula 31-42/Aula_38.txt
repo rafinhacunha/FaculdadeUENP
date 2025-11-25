@@ -1,0 +1,72 @@
+PT1 
+Principal diferença entre encadeamento separado e endereçamento aberto 
+Encadeamento separado: 
+Cada slot da tabela contém uma lista encadeada 
+Colisões são resolvidas adicionando elementos à lista 
+Não há limite teórico para o número de elementos (além da memória) 
+Endereçamento aberto: 
+Todos os elementos são armazenados diretamente na tabela 
+Colisões são resolvidas procurando outro slot vazio na própria tabela 
+Número máximo de elementos = tamanho da tabela 
+Sondagem linear - próximo slot 
+Se h(x) = 3 e slots 3, 4 ocupados em tabela de tamanho 10: 
+Próximo slot verificado: slot 5 
+Padrão da sondagem linear: h(x), h(x)+1, h(x)+2, ... mod m 
+PT2 
+Sondagem quadrática com m = 11 
+Chaves: {22, 3, 14, 25, 36} 
+h(x) = x mod 11 
+Sondagem: hⱼ(x) = (h(x) + j²) mod 11 
+Inserções: 
+22: h(22) = 0 → Slot 0    
+3: h(3) = 3 → Slot 3  
+14: h(14) = 3 (colisão) → j=1: (3+1²)=4 → Slot 4  
+25: h(25) = 3 (colisão) → j=1: (3+1²)=4 (colisão) → j=2: (3+4)=7 → Slot 7  
+36: h(36) = 3 (colisão) → j=1: (3+1²)=4 (colisão) → j=2: (3+4)=7 (colisão) → j=3: (3+9)=12 
+mod 11=1 → Slot 1  
+Tabela final: 
+Índice: 0   1   2   3   4   5   6   7   8   9   10 
+Chave:  22  36  -   3   14  -   -   25  -   -   - 
+Agrupamento primário vs secundário 
+Agrupamento primário: 
+O que é: Formação de longas sequências consecutivas de slots ocupados 
+Causado por: Sondagem linear 
+Problema: Elementos com diferentes hashes iniciais se fundem em um grande cluster 
+Agrupamento secundário: 
+O que é: Elementos com mesmo hash inicial seguem o mesmo padrão de sondagem 
+Resolvido por: Sondagem quadrática e hash duplo 
+Vantagem: Diferentes elementos com mesmo hash inicial seguem caminhos 
+diferentes 
+PT3 
+Hash duplo com m = 11 
+Chaves: {22, 3, 14, 25, 36} 
+h₁(x) = x mod 11 
+h₂(x) = 1 + (x mod 5) 
+Inserções: 
+22: h₁(22)=0, h₂(22)=1+(22 mod 5)=1+2=3 → Slot 0  
+3: h₁(3)=3, h₂(3)=1+(3 mod 5)=1+3=4 → Slot 3  
+14: h₁(14)=3 (colisão) → j=1: (3+1×4)=7 → Slot 7  
+25: h₁(25)=3 (colisão) → j=1: (3+1×h₂(25))=3+1×[1+(25 mod 5)=1+0=1]=4 → Slot 4  
+36: h₁(36)=3 (colisão) → j=1: (3+1×h₂(36))=3+1×[1+(36 mod 5)=1+1=2]=5 → Slot 5 
+Índice: 0   1   2   3   4   5   6   7   8   9   10 
+Chave:  22  -   -   3   25  36  -   14  -   -   - 
+Comparação com sondagem quadrática 
+Sondagem quadrática: [22, 36, -, 3, 14, -, -, 25, -, -, -] 
+Hash duplo: [22, -, -, 3, 25, 36, -, 14, -, -, -] 
+Diferenças: 
+Hash duplo distribui melhor os elementos 
+Em hash duplo, os elementos 25 e 36 ficam em slots 4 e 5 (mais próximos do hash 
+inicial) 
+Sondagem quadrática "pula" mais slots devido ao crescimento quadrático 
+PT4 
+Por que h₂(x) nunca pode retornar zero 
+Razão principal: Se h₂(x) = 0, a sondagem ficaria presa no mesmo slot 
+Padrão de sondagem: hⱼ(x) = (h₁(x) + j × h₂(x)) mod m 
+Se h₂(x) = 0: hⱼ(x) = h₁(x) para todo j 
+Resultado: Sempre verifica o mesmo slot, nunca progride 
+Propriedade de h₂(x) em relação a m 
+h₂(x) deve ser coprimo com m (ou seja, mdc(h₂(x), m) = 1) 
+Por quê: 
+Garante que a sequência de sondagem percorra todos os slots da tabela 
+Se h₂(x) e m compartilham fatores primos, alguns slots nunca serão visitados 
+Exemplo: Se m = 10 e h₂(x) = 2, apenas slots pares ou ímpares seriam visitados 

@@ -1,0 +1,79 @@
+PT1 
+1)  Modelagem de Redes 
+Instagram 
+Vértices: Usuários 
+Arestas: Relação "seguir" 
+Direcionado: SIM (A seguir B ≠ B seguir A) 
+Ponderado: NÃO (apenas existe/não-existe a relação) 
+LinkedIn 
+Vértices: Profissionais/empresas 
+Arestas: Conexões profissionais 
+Direcionado: NÃO (conexões são mútuas) 
+Ponderado: PODE SER (força da conexão, anos de conhecimentos) 
+Grade de pré-requisitos da faculdade 
+Vértices: Disciplinas 
+Arestas: Relação de pré-requisito 
+Direcionado: SIM (Calculo I → Cálculo II) 
+Ponderado: NÃO (apenas relação de dependência) 
+Exercício 2: Representação (Matriz e Lista) 
+Considerando este grafo não-direcionado: 
+0 -- 1 
+|    
+| 
+2 -- 3 
+Matriz de Adjacência: 
+0 1 2 3 
+0 0 1 1 0 
+1 1 0 0 1   
+2 1 0 0 1 
+3 0 1 1 0 
+Lista de Adjacência: 
+0: 1 → 2 
+1: 0 → 3 
+2: 0 → 3 
+3: 1 → 2 
+Exercício 3: Prova do Handshaking Lemma 
+Prova: 
+Cada aresta em um grafo não-direcionado conecta dois vértices 
+Na lista de adjacência, cada aresta (u,v) aparece duas vezes: 
+Uma vez na lista de u (v como vizinho) 
+Uma vez na lista de v (u como vizinho) 
+Portanto, ao somar todos os graus, cada aresta é contada exatamente duas vezes 
+Logo: ∑ grau(v) = 2 × m 
+Exercício 4: Análise de Matriz de Adjacência 
+Dada matriz M n×n para grafo direcionado: 
+Grau de saída (out-degree) de vértice v 
+grau_saida = 0 
+for i in range(n): 
+grau_saida += M[v][i]  # Soma linha v 
+Complexidade: O(n) 
+Grau de entrada (in-degree) de vértice v 
+grau_entrada = 0 
+for i in range(n): 
+grau_entrada += M[i][v]  # Soma coluna v 
+Complexidade: O(n) 
+O que M² representa? 
+M²[i][j] = número de caminhos de comprimento 2 de i para j 
+Exemplo: Se M²[0][2] = 3, existem 3 caminhos 0→x→2 para algum vértice x 
+Exercício 5: Design de Lista de Adjacência para Grafo Ponderado 
+#include #include  
+struct Aresta { int destino; int peso; 
+Aresta(int d, int p) : destino(d), peso(p) {} 
+}; 
+class GrafoPonderado { private: std::vector<std::vector> lista_adj; int num_vertices; 
+bool direcionado; 
+public: GrafoPonderado(int n, bool dir = false) : num_vertices(n), direcionado(dir) { 
+lista_adj.resize(n); } 
+void adicionarAresta(int origem, int destino, int peso) { 
+lista_adj[origem].push_back(Aresta(destino, peso)); 
+if (!direcionado) { 
+lista_adj[destino].push_back(Aresta(origem, peso)); 
+} 
+} 
+const std::vector<Aresta>& obterVizinhos(int vertice) const { 
+return lista_adj[vertice]; 
+} 
+int obterNumVertices() const { 
+return num_vertices; 
+} 
+};
