@@ -1,0 +1,11 @@
+1) a.V
+b. V
+c. F
+d. V
+e. V
+f. F
+g. F
+h. V
+i. V
+j. F
+k. F
