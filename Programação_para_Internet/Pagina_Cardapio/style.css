@@ -1,13 +1,13 @@
-body{
+body {
     margin: 0;
 }
 
-.cabecalho{
+.cabecalho {
     background-color: #171311;
     height: 100px;
 }
 
-.cabecalho-titulo{
+.cabecalho-titulo {
     text-align: center;
     color: #F3E9D2;
     font-size: 48px;
@@ -16,7 +16,7 @@ body{
     letter-spacing: 2px;
 }
 
-.cabecalho-paragrafo{
+.cabecalho-paragrafo {
     margin-top: 0;
     color: #D99A3D;
 }
@@ -30,31 +30,31 @@ main {
     height: 680px;
 }
 
-.cabecalho-paragrafo{
+.cabecalho-paragrafo {
     color: #F3E9D2;
     text-align: center;
     font-family: 'Bebas Neue', sans-serif;
 }
 
 
-.conteudo-titulo{
+.conteudo-titulo {
     padding-top: 30px;
     margin: 0;
     font-size: 32px;
     font-family: 'Bebas Neue', sans-serif;
 }
 
-.conteudo-titulo_2{
+.conteudo-titulo_2 {
     font-family: 'Bebas Neue', sans-serif;
 
 }
 
-.conteudo-lista{
+.conteudo-lista {
     font-family: 'Montserrat', sans-serif;
     letter-spacing: 1px;
 }
 
-.conteudo-imagem{
+.conteudo-imagem {
     width: 420px;
     height: 420px;
     object-fit: cover;
@@ -62,7 +62,7 @@ main {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
-.rodape{
+.rodape {
     background-color: #171311;
     display: flex;
     flex-direction: column;
@@ -72,13 +72,13 @@ main {
     padding: 20px 0;
 }
 
-.rodape-paragrafo{
+.rodape-paragrafo {
     color: #F3E9D2;
     font-family: 'Bebas Neue', sans-serif;
     margin: 0;
 }
 
-.rodape-ancora{
+.rodape-ancora {
     font-family: 'Bebas Neue', sans-serif;
     color: #F3E9D2;
 }
