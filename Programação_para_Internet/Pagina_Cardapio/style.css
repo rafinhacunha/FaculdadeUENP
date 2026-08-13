@@ -1,0 +1,84 @@
+body{
+    margin: 0;
+}
+
+.cabecalho{
+    background-color: #171311;
+    height: 100px;
+}
+
+.cabecalho-titulo{
+    text-align: center;
+    color: #F3E9D2;
+    font-size: 48px;
+    margin: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+}
+
+.cabecalho-paragrafo{
+    margin-top: 0;
+    color: #D99A3D;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 8%;
+    background-color: #F3E9D2;
+    height: 680px;
+}
+
+.cabecalho-paragrafo{
+    color: #F3E9D2;
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+
+.conteudo-titulo{
+    padding-top: 30px;
+    margin: 0;
+    font-size: 32px;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+.conteudo-titulo_2{
+    font-family: 'Bebas Neue', sans-serif;
+
+}
+
+.conteudo-lista{
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 1px;
+}
+
+.conteudo-imagem{
+    width: 420px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.rodape{
+    background-color: #171311;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 0;
+}
+
+.rodape-paragrafo{
+    color: #F3E9D2;
+    font-family: 'Bebas Neue', sans-serif;
+    margin: 0;
+}
+
+.rodape-ancora{
+    font-family: 'Bebas Neue', sans-serif;
+    color: #F3E9D2;
+}
